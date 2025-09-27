@@ -1,3 +1,3 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using SimplifiedLotteryGame;
 
-Console.WriteLine("Hello, World!");
+new LotteryGame().StartGame();

@@ -6,5 +6,5 @@ public abstract class Prize(decimal percentage, string name)
 
     public string Name { get; } = name;
 
-    public abstract void DistributeWinnings();
+    public abstract void DistributeWinnings(List<Ticket> availableTickets, int initialTicketsCount);
 }

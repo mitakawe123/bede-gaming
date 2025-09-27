@@ -1,9 +1,17 @@
 namespace SimplifiedLotteryGame.Models.Prizes;
 
-public class SecondTier(decimal percentage, string name) : Prize(percentage, name)
+public class SecondTier() : Prize(0.3m, "Second Tier")
 {
-    public override void DistributeWinnings()
+    public override void DistributeWinnings(List<Ticket> availableTickets, int initialTicketsCount)
     {
-        throw new NotImplementedException();
+        var winnersCount = (int)Math.Round(initialTicketsCount * 0.1);
+        var random = new Random();
+        var randomWinningTickets = availableTickets
+            .OrderBy(p => random.Next())
+            .Take(winnersCount)
+            .ToList();
+
+        House.AwardWinningTickets(randomWinningTickets, Percentage);
+        randomWinningTickets.ForEach(t => availableTickets.Remove(t));
     }
 }

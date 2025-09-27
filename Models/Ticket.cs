@@ -2,7 +2,14 @@ namespace SimplifiedLotteryGame.Models;
 
 public sealed class Ticket
 {
-    public uint Id { get; } //auto generate this
+    private static uint _nextTicketId = 1;
+    
+    public uint Id { get; }
 
-    public uint Price { get; } = 1; // 1 dollar hardcoded for one
+    public static uint Price => 1; // Tickets are priced at $1 each
+
+    public Ticket()
+    {
+        Id = _nextTicketId++;
+    }
 }
