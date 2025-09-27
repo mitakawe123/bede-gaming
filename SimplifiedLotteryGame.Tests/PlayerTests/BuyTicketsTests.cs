@@ -1,6 +1,6 @@
 using SimplifiedLotteryGame.Models;
 
-namespace SimplifiedLotteryGame.UnitTests.PlayerTests;
+namespace SimplifiedLotteryGame.Tests.PlayerTests;
 
 public class BuyTicketsTests
 {
