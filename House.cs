@@ -1,4 +1,6 @@
-namespace SimplifiedLotteryGame.Models;
+using SimplifiedLotteryGame.Models;
+
+namespace SimplifiedLotteryGame;
 
 public static class House
 {
@@ -20,15 +22,15 @@ public static class House
 
     public static void AwardWinningTickets(IReadOnlyCollection<Ticket> winningTickets, decimal prizePercentage)
     {
-        var winningForTicket = (_revenue * prizePercentage) / winningTickets.Count; // equal winning for each ticket
+        var ticketWinning = (_revenue * prizePercentage) / winningTickets.Count; // equal win for each ticket
         foreach (var winningTicket in winningTickets)
         {
-            WinningTickets[winningTicket.Id] = winningForTicket;
-            _revenue -= winningForTicket;
+            WinningTickets[winningTicket.Id] = ticketWinning;
+            _revenue -= ticketWinning;
         }
     }
 
-    public static void PrintWinnings()
+    public static void Print()
     {
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.WriteLine("\n✨🎉 Winning Tickets 🎉✨\n");

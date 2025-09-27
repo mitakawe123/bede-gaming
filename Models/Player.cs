@@ -3,10 +3,10 @@ namespace SimplifiedLotteryGame.Models;
 public sealed class Player
 {
     private static uint _nextPlayerId = 1;
-    
-    public uint Id { get; }
 
-    public string Name => $"Player {Id}";
+    private readonly uint _id;
+
+    public string Name => $"Player {_id}";
 
     public decimal Balance { get; private set; } = 10; // Each player begins with a starting balance of $10
 
@@ -14,7 +14,7 @@ public sealed class Player
 
     public Player()
     {
-        Id = _nextPlayerId++;
+        _id = _nextPlayerId++;
     }
 
     public void BuyTickets(uint? count = null)
@@ -35,6 +35,25 @@ public sealed class Player
             Balance -= Ticket.Price;
         }
 
-        Console.WriteLine($"{Name} has bought {count} tickets");
+        Print(count);
+    }
+
+    private void Print(uint? count)
+    {
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.Write("🎟️  ");
+        Console.ResetColor();
+
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.Write($"{Name}");
+        Console.ResetColor();
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.Write($" bought {count} ticket{(count > 1 ? "s" : "")}");
+        Console.ResetColor();
+
+        Console.ForegroundColor = ConsoleColor.Magenta;
+        Console.WriteLine(" 💸✨");
+        Console.ResetColor();
     }
 }

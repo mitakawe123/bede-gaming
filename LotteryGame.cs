@@ -23,6 +23,7 @@ public class LotteryGame
     public void StartGame()
     {
         Console.WriteLine("Welcome to the Bede Lottery 🎰");
+        
         AddHumanPlayer();
         AddCpuPlayers();
         
@@ -33,7 +34,9 @@ public class LotteryGame
         
         _prizes.ForEach(prize => prize.DistributeWinnings(availableTickets, initialTicketsCount));
 
-        House.PrintWinnings();
+        House.Print();
+        
+        Console.WriteLine("See you again in Bede Lottery 🎰");
     }
 
     private void AddCpuPlayers()
