@@ -6,6 +6,10 @@ public sealed class Player
 
     private readonly uint _id;
 
+    public const int MinimumTicketCount = 1;
+    
+    public const int MaximumTicketCount = 10;
+
     public string Name => $"Player {_id}";
 
     public decimal Balance { get; private set; } = 10; // Each player begins with a starting balance of $10
@@ -21,7 +25,7 @@ public sealed class Player
     {
         if (count is null)
         {
-            var randomTicketsNumber = new Random().Next(1, 10); // All players (human and CPU) are limited to purchasing between 1 and 10 tickets
+            var randomTicketsNumber = new Random().Next(MinimumTicketCount, MaximumTicketCount); // All players (human and CPU) are limited to purchasing between 1 and 10 tickets
             count = (uint)randomTicketsNumber;
         }
         

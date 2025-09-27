@@ -2,9 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimplifiedLotteryGame", "SimplifiedLotteryGame.csproj", "{0068BAF7-6B5B-4CDB-BE11-46E81365CE51}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimplifiedLotteryGame.UnitTests", "..\SimplifiedLotteryGame.UnitTests\SimplifiedLotteryGame.UnitTests.csproj", "{CFAC5D98-AD51-4B20-8F33-13498037EF3C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimplifiedLotteryGame.IntegrationTests", "..\SimplifiedLotteryGame.IntegrationTests\SimplifiedLotteryGame.IntegrationTests.csproj", "{8EC3E4BE-6717-4A76-ACC4-6C3AC0B44AAE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimplifiedLotteryGame.Tests", "..\SimplifiedLotteryGame.Tests\SimplifiedLotteryGame.Tests.csproj", "{CFAC5D98-AD51-4B20-8F33-13498037EF3C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,9 +18,5 @@ Global
 		{CFAC5D98-AD51-4B20-8F33-13498037EF3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CFAC5D98-AD51-4B20-8F33-13498037EF3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CFAC5D98-AD51-4B20-8F33-13498037EF3C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8EC3E4BE-6717-4A76-ACC4-6C3AC0B44AAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8EC3E4BE-6717-4A76-ACC4-6C3AC0B44AAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8EC3E4BE-6717-4A76-ACC4-6C3AC0B44AAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8EC3E4BE-6717-4A76-ACC4-6C3AC0B44AAE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -24,7 +24,7 @@ public class LotteryGame
     {
         Console.WriteLine("Welcome to the Bede Lottery 🎰");
         
-        AddHumanPlayer();
+        AddHumanPlayer(); // These methods can be moved to strategy pattern via (CpuPlayer and HumanPlayer classes) but for a simple console app will be overkill
         AddCpuPlayers();
         
         House.CalculateRevenue(_players);
