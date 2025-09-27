@@ -8,6 +8,10 @@ public static class House
 
     private static readonly Dictionary<uint, decimal> WinningTickets = [];
     
+    public static decimal GetRevenue() => _revenue;
+    
+    public static IReadOnlyDictionary<uint, decimal> GetWinners() => WinningTickets;
+    
     public static void CalculateRevenue(IReadOnlyCollection<Player> players)
     {
         _revenue = players.Sum(p => p.Balance + p.Tickets.Sum(t => Ticket.Price));
