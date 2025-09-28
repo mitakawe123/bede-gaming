@@ -1,12 +1,12 @@
 using SimplifiedLotteryGame.DTOs;
+using SimplifiedLotteryGame.Models.Players;
 
 namespace SimplifiedLotteryGame.Models.Prizes;
 
 public class ThirdTier() : Prize(0.1m, "Third Tier", ticketPoolPercentage: 0.2)
 {
-    public override IReadOnlyCollection<WinningResult> DistributeWinnings(
-        List<Ticket> availableTickets, 
-        IReadOnlyDictionary<uint, Player> ticketOwners,
+    public override IReadOnlyCollection<WinningResult> DistributeWinnings(List<Ticket> availableTickets,
+        IReadOnlyDictionary<uint, IPlayer> ticketOwners,
         decimal revenue)
     {
         var winnersCount = (int)Math.Round(ticketOwners.Count * TicketPoolPercentage);

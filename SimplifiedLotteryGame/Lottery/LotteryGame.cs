@@ -1,77 +1,44 @@
 using SimplifiedLotteryGame.DTOs;
-using SimplifiedLotteryGame.Models;
+using SimplifiedLotteryGame.Models.Players;
 using SimplifiedLotteryGame.Models.Prizes;
 
-namespace SimplifiedLotteryGame;
+namespace SimplifiedLotteryGame.Lottery;
 
 public class LotteryGame
 {
-    private readonly List<Player> _players = [];
-    private readonly List<Prize> _prizes = [];
-
+    private readonly LotteryEngine _engine;
+    
     public LotteryGame()
     {
         var prizeTypes = typeof(Prize).Assembly.GetTypes()
-            .Where(t => t.IsSubclassOf(typeof(Prize)) && !t.IsAbstract);
+            .Where(t => t.IsSubclassOf(typeof(Prize)) && !t.IsAbstract)
+            .Select(t => (Prize)Activator.CreateInstance(t)!)
+            .OrderByDescending(p => p.Percentage);
 
-        foreach (var prizeType in prizeTypes)
-            if (Activator.CreateInstance(prizeType) is Prize prize)
-                _prizes.Add(prize);
-        
-        _prizes = _prizes.OrderByDescending(p => p.Percentage).ToList();
+        _engine = new LotteryEngine(prizeTypes);
     }
-    
-    public void StartGame()
+
+    public void Start()
     {
-        Console.WriteLine("Welcome to the Bede Lottery 🎰");
-        
-        AddHumanPlayer(); // These methods can be moved to strategy pattern via (CpuPlayer and HumanPlayer classes) but for a simple console app will be overkill
+        AddHumanPlayer();
         AddCpuPlayers();
-        
-        var house = new House();    
-        house.CalculateRevenue(_players);
-        
-        List<Ticket> availableTickets = [.. _players.SelectMany(p => p.Tickets)];
-        var ticketOwners = _players
-            .SelectMany(p => p.Tickets, (p, t) => new { p, t })
-            .ToDictionary(x => x.t.Id, x => x.p);
-        
-        List<WinningResult> res = [.. _prizes.SelectMany(prize => prize.DistributeWinnings(
-            availableTickets: availableTickets, 
-            ticketOwners: ticketOwners, 
-            revenue: house.Revenue))];
-        
-        house.RecordWinnings(res);
-        
-        Print(res, house.Revenue);
-    }
-
-    private void AddCpuPlayers()
-    {
-        var randomPlayerNumber = new Random().Next(9, 14); // total players = 10–15 (9-14 cpu based and one human)
-        for (var i = 0; i < randomPlayerNumber; i++)
-        {
-            var cpuPlayer = new Player();
-            cpuPlayer.BuyTickets();
-            _players.Add(cpuPlayer);
-        }
+        _engine.Run();
     }
 
     private void AddHumanPlayer()
     {
-        var humanPlayer = new Player();
-        Console.WriteLine($"And hello again {humanPlayer.Name}");
-
+        var human = new HumanPlayer();
         uint ticketNumber;
+
         while (true)
         {
-            Console.WriteLine($"How many tickets do you want to buy, {humanPlayer.Name}?");
+            Console.WriteLine($"How many tickets for {human.Name}? (Between {Player.MinimumTicketCount} and {Player.MaximumTicketCount})");
             var input = Console.ReadLine();
 
             if (uint.TryParse(input, out ticketNumber) 
                 && ticketNumber is >= Player.MinimumTicketCount and <= Player.MaximumTicketCount)
             {
-                break; // valid input, exit loop
+                break; // valid input
             }
 
             Console.ForegroundColor = ConsoleColor.Red;
@@ -79,11 +46,23 @@ public class LotteryGame
             Console.ResetColor();
         }
 
-        humanPlayer.BuyTickets(ticketNumber);
-        _players.Add(humanPlayer);
+        human.BuyTickets(ticketNumber);
+        _engine.AddPlayer(human);
+    }
+
+    private void AddCpuPlayers()
+    {
+        var rng = new Random();
+        int count = rng.Next(9, 14);
+        for (int i = 0; i < count; i++)
+        {
+            var cpu = new CpuPlayer();
+            cpu.BuyTickets();
+            _engine.AddPlayer(cpu);
+        }
     }
     
-    private static void Print(IReadOnlyCollection<WinningResult> results, decimal revenue)
+    public static void Print(IReadOnlyCollection<WinningResult> results, decimal revenue)
     {
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.WriteLine("\n✨🎉 Winning Tickets 🎉✨\n");

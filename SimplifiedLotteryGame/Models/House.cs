@@ -1,13 +1,13 @@
 using SimplifiedLotteryGame.DTOs;
-using SimplifiedLotteryGame.Models;
+using SimplifiedLotteryGame.Models.Players;
 
-namespace SimplifiedLotteryGame;
+namespace SimplifiedLotteryGame.Models;
 
 public class House
 {
     public decimal Revenue { get; private set; }
 
-    public void CalculateRevenue(IReadOnlyCollection<Player> players)
+    public void CalculateRevenue(IReadOnlyCollection<IPlayer> players)
     {
         Revenue = players.Sum(p => p.Balance + p.Tickets.Sum(t => Ticket.Price));
     }

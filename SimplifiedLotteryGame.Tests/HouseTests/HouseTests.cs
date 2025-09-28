@@ -1,13 +1,21 @@
 using SimplifiedLotteryGame.DTOs;
 using SimplifiedLotteryGame.Models;
+using SimplifiedLotteryGame.Models.Players;
 
 namespace SimplifiedLotteryGame.Tests.HouseTests;
 
 public class HouseTests
 {
-    private static Player CreatePlayer(uint? ticketsCount = null)
+    private static Player CreateHumanPlayer(uint? ticketsCount = null)
     {
-        var player = new Player();
+        var player = new HumanPlayer();
+        player.BuyTickets(ticketsCount);
+        return player;
+    }
+    
+    private static Player CreateCpuPlayer(uint? ticketsCount = null)
+    {
+        var player = new CpuPlayer();
         player.BuyTickets(ticketsCount);
         return player;
     }
@@ -18,8 +26,8 @@ public class HouseTests
         // Arrange
         var players = new List<Player>
         {
-            CreatePlayer(2),
-            CreatePlayer(3)
+            CreateHumanPlayer(2),
+            CreateCpuPlayer(3)
         };
 
         var house = new House();
@@ -35,7 +43,7 @@ public class HouseTests
     public void RecordWinnings_ShouldReduceRevenueAndIncreasePlayerBalance()
     {
         // Arrange
-        var player = CreatePlayer(2);
+        var player = CreateHumanPlayer(2);
         var ticket = player.Tickets.First();
 
         var house = new House();
@@ -59,8 +67,8 @@ public class HouseTests
     public void RecordWinnings_ShouldHandleMultipleResults()
     {
         // Arrange
-        var player1 = CreatePlayer(1);
-        var player2 = CreatePlayer(5);
+        var player1 = CreateCpuPlayer(1);
+        var player2 = CreateHumanPlayer(5);
 
         var house = new House();
         house.CalculateRevenue(new List<Player> { player1, player2 });

@@ -1,3 +1,3 @@
-﻿using SimplifiedLotteryGame;
+﻿using SimplifiedLotteryGame.Lottery;
 
-new LotteryGame().StartGame();
+new LotteryGame().Start();

@@ -1,4 +1,5 @@
 using SimplifiedLotteryGame.DTOs;
+using SimplifiedLotteryGame.Models.Players;
 
 namespace SimplifiedLotteryGame.Models.Prizes;
 
@@ -11,7 +12,7 @@ public abstract class Prize(decimal percentage, string name, double ticketPoolPe
     protected double TicketPoolPercentage { get; } = ticketPoolPercentage;
 
     public abstract IReadOnlyCollection<WinningResult> DistributeWinnings(
-        List<Ticket> availableTickets, 
-        IReadOnlyDictionary<uint, Player> ticketOwners,
+        List<Ticket> availableTickets,
+        IReadOnlyDictionary<uint, IPlayer> ticketOwners,
         decimal revenue);
 }

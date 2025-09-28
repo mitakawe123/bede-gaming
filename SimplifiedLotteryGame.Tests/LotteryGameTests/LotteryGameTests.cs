@@ -1,3 +1,5 @@
+using SimplifiedLotteryGame.Lottery;
+
 namespace SimplifiedLotteryGame.Tests.LotteryGameTests;
 
 public class LotteryGameTests
@@ -13,7 +15,7 @@ public class LotteryGameTests
         Console.SetOut(stringWriter);
 
         // Act & Assert
-        var exception = Record.Exception(() => lotteryGame.StartGame());
+        var exception = Record.Exception(() => lotteryGame.Start());
         Assert.Null(exception); // should not throw
     }
 
@@ -31,11 +33,11 @@ public class LotteryGameTests
         Console.SetOut(stringWriter);
 
         // Act
-        lotteryGame.StartGame();
+        lotteryGame.Start();
 
         // Assert
         var output = stringWriter.ToString();
         Assert.Contains("Invalid input", output);
-        Assert.Contains("How many tickets do you want to buy", output);
+        Assert.Contains("How many tickets", output);
     }
 }

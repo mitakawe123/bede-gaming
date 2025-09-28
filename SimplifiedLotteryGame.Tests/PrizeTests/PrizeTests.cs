@@ -1,18 +1,19 @@
 using SimplifiedLotteryGame.Models;
+using SimplifiedLotteryGame.Models.Players;
 using SimplifiedLotteryGame.Models.Prizes;
 
 namespace SimplifiedLotteryGame.Tests.PrizeTests;
 
 public class PrizeTests
 {
-    private static List<Player> GeneratePlayers(int count, int seed = 42)
+    private static List<IPlayer> GeneratePlayers(int count, int seed = 42)
     {
         var random = new Random(seed);
-        var players = new List<Player>();
+        var players = new List<IPlayer>();
 
         for (int i = 0; i < count; i++)
         {
-            var player = new Player();
+            var player = new HumanPlayer();
             player.BuyTickets((uint)random.Next(Player.MinimumTicketCount, Player.MaximumTicketCount));
             players.Add(player);
         }
@@ -20,7 +21,7 @@ public class PrizeTests
         return players;
     }
 
-    private static Dictionary<uint, Player> BuildTicketOwners(List<Player> players) =>
+    private static Dictionary<uint, IPlayer> BuildTicketOwners(List<IPlayer> players) =>
         players.SelectMany(p => p.Tickets, (p, t) => new { p, t })
                .ToDictionary(x => x.t.Id, x => x.p);
 

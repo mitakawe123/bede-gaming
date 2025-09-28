@@ -1,4 +1,5 @@
 using SimplifiedLotteryGame.Models;
+using SimplifiedLotteryGame.Models.Players;
 
 namespace SimplifiedLotteryGame.Tests.PlayerTests;
 
@@ -8,7 +9,7 @@ public class BuyTicketsTests
     public void BuyTickets_WithFixedCount()
     {
         // Arrange
-        var player = new Player();
+        var player = new HumanPlayer();
         var startingBalance = player.Balance;
         const uint ticketsToBuy = 3;
 
@@ -25,7 +26,7 @@ public class BuyTicketsTests
     public void BuyTickets_WithRandomCount()
     {
         // Arrange
-        var player = new Player();
+        var player = new CpuPlayer();
 
         // Act
         player.BuyTickets();
