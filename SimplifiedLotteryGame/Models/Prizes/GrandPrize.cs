@@ -5,21 +5,21 @@ namespace SimplifiedLotteryGame.Models.Prizes;
 public class GrandPrize() : Prize(0.5m, "Grand Prize")
 {
     public override IReadOnlyCollection<WinningResult> DistributeWinnings(
-        List<Ticket> availableTickets,
+        List<Ticket> availableTickets, 
         IReadOnlyDictionary<uint, Player> ticketOwners,
-        int initialTicketsCount)
+        decimal revenue)
     {
         var random = new Random().Next(availableTickets.Count);
-        var winningTicket = availableTickets[random];
-        var winning = House.Revenue * Percentage;
+        var ticket = availableTickets[random];
+        var amount = revenue * Percentage;
         
-        availableTickets.Remove(winningTicket);
+        availableTickets.Remove(ticket);
         return
         [
             new WinningResult(
-                Player: ticketOwners[winningTicket.Id],
-                Ticket: winningTicket,
-                Amount: winning)
+                Player: ticketOwners[ticket.Id],
+                Ticket: ticket,
+                Amount: amount)
         ];
     }
 }

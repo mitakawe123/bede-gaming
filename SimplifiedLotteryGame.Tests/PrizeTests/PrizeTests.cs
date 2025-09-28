@@ -30,16 +30,18 @@ public class PrizeTests
         // Arrange
         var players = GeneratePlayers(15);
         var tickets = players.SelectMany(p => p.Tickets).ToList();
-        var initialCount = tickets.Count;
         var owners = BuildTicketOwners(players);
+
+        var house = new House();
+        house.CalculateRevenue(players);
 
         var prize = new GrandPrize();
         
         // Act
-        prize.DistributeWinnings(tickets, owners, initialCount);
+        prize.DistributeWinnings(tickets, owners, house.Revenue);
 
         // Assert
-        Assert.Equal(initialCount - 1, tickets.Count);
+        Assert.Equal(owners.Count - 1, tickets.Count);
     }
 
     [Fact]
@@ -48,17 +50,19 @@ public class PrizeTests
         // Arrange
         var players = GeneratePlayers(15);
         var tickets = players.SelectMany(p => p.Tickets).ToList();
-        var initialCount = tickets.Count;
         var owners = BuildTicketOwners(players);
+
+        var house = new House();
+        house.CalculateRevenue(players);
 
         var prize = new SecondTier();
         
         // Act
-        prize.DistributeWinnings(tickets, owners, initialCount);
+        prize.DistributeWinnings(tickets, owners, house.Revenue);
 
         // Assert
-        var removed = initialCount - tickets.Count;
-        Assert.True(removed >= (int)Math.Round(initialCount * 0.1));
+        var removed = owners.Count - tickets.Count;
+        Assert.True(removed >= (int)Math.Round(owners.Count * 0.1));
     }
 
     [Fact]
@@ -67,16 +71,18 @@ public class PrizeTests
         // Arrange
         var players = GeneratePlayers(15);
         var tickets = players.SelectMany(p => p.Tickets).ToList();
-        var initialCount = tickets.Count;
         var owners = BuildTicketOwners(players);
+
+        var house = new House();
+        house.CalculateRevenue(players);
 
         var prize = new ThirdTier();
         
         // Act
-        prize.DistributeWinnings(tickets, owners, initialCount);
+        prize.DistributeWinnings(tickets, owners, house.Revenue);
 
         // Assert
-        var removed = initialCount - tickets.Count;
-        Assert.True(removed >= (int)Math.Round(initialCount * 0.2));
+        var removed = owners.Count - tickets.Count;
+        Assert.True(removed >= (int)Math.Round(owners.Count * 0.2));
     }
 }

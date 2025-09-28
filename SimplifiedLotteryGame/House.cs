@@ -3,16 +3,16 @@ using SimplifiedLotteryGame.Models;
 
 namespace SimplifiedLotteryGame;
 
-public static class House
+public class House
 {
-    public static decimal Revenue { get; private set; }
+    public decimal Revenue { get; private set; }
 
-    public static void CalculateRevenue(IReadOnlyCollection<Player> players)
+    public void CalculateRevenue(IReadOnlyCollection<Player> players)
     {
         Revenue = players.Sum(p => p.Balance + p.Tickets.Sum(t => Ticket.Price));
     }
 
-    public static void RecordWinnings(IReadOnlyCollection<WinningResult> results)
+    public void RecordWinnings(IReadOnlyCollection<WinningResult> results)
     {
         foreach (var result in results)
         {

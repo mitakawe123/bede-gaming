@@ -1,4 +1,3 @@
-using System.Reflection;
 using SimplifiedLotteryGame.DTOs;
 using SimplifiedLotteryGame.Models;
 
@@ -13,17 +12,9 @@ public class HouseTests
         return player;
     }
 
-    private static void ResetRevenue()
-    {
-        var property = typeof(House).GetProperty(nameof(House.Revenue), BindingFlags.Static | BindingFlags.Public)!;
-        property.SetValue(null, 0m);
-    }
-
     [Fact]
     public void CalculateRevenue_ShouldSumBalancesAndTickets()
     {
-        ResetRevenue();
-        
         // Arrange
         var players = new List<Player>
         {
@@ -31,24 +22,25 @@ public class HouseTests
             CreatePlayer(3)
         };
 
+        var house = new House();
+
         // Act
-        House.CalculateRevenue(players);
+        house.CalculateRevenue(players);
 
         // Assert
-        Assert.Equal(20m, House.Revenue);
+        Assert.Equal(20m, house.Revenue);
     }
 
     [Fact]
     public void RecordWinnings_ShouldReduceRevenueAndIncreasePlayerBalance()
     {
-        ResetRevenue();
-        
         // Arrange
         var player = CreatePlayer(2);
         var ticket = player.Tickets.First();
 
-        House.CalculateRevenue([player]);
-        var initialRevenue = House.Revenue;
+        var house = new House();
+        house.CalculateRevenue(new List<Player> { player });
+        var initialRevenue = house.Revenue;
 
         var results = new List<WinningResult>
         {
@@ -56,24 +48,23 @@ public class HouseTests
         };
 
         // Act
-        House.RecordWinnings(results);
+        house.RecordWinnings(results);
 
         // Assert
-        Assert.Equal(initialRevenue - 5m, House.Revenue);
+        Assert.Equal(initialRevenue - 5m, house.Revenue);
         Assert.Equal(13m, player.Balance); // (initialBalance - tickets cost) + winning amount
     }
 
     [Fact]
     public void RecordWinnings_ShouldHandleMultipleResults()
     {
-        ResetRevenue();
-        
         // Arrange
         var player1 = CreatePlayer(1);
         var player2 = CreatePlayer(5);
 
-        House.CalculateRevenue([player1, player2]);
-        var initialRevenue = House.Revenue;
+        var house = new House();
+        house.CalculateRevenue(new List<Player> { player1, player2 });
+        var initialRevenue = house.Revenue;
 
         var results = new List<WinningResult>
         {
@@ -82,10 +73,10 @@ public class HouseTests
         };
 
         // Act
-        House.RecordWinnings(results);
+        house.RecordWinnings(results);
 
         // Assert
-        Assert.Equal(initialRevenue - 10m, House.Revenue);
+        Assert.Equal(initialRevenue - 10m, house.Revenue);
         Assert.Equal(12m, player1.Balance); // (initialBalance - tickets cost) + winning amount
         Assert.Equal(12m, player2.Balance);
     }

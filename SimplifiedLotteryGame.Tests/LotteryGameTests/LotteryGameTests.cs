@@ -18,16 +18,24 @@ public class LotteryGameTests
     }
 
     [Fact]
-    public void StartGame_ShouldThrow_WhenHumanInputIsInvalid()
+    public void StartGame_ShouldRetry_WhenHumanInputIsInvalid()
     {
         // Arrange
         var lotteryGame = new LotteryGame();
-        using var stringReader = new StringReader("invalid_number");
+
+        // Simulate invalid input first, then a valid number (e.g., "3")
+        using var stringReader = new StringReader("invalid_number\n3");
         Console.SetIn(stringReader);
+
         using var stringWriter = new StringWriter();
         Console.SetOut(stringWriter);
 
-        // Act & Assert
-        Assert.Throws<ArgumentException>(() => lotteryGame.StartGame());
+        // Act
+        lotteryGame.StartGame();
+
+        // Assert
+        var output = stringWriter.ToString();
+        Assert.Contains("Invalid input", output);
+        Assert.Contains("How many tickets do you want to buy", output);
     }
 }

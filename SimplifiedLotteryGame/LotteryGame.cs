@@ -28,17 +28,22 @@ public class LotteryGame
         AddHumanPlayer(); // These methods can be moved to strategy pattern via (CpuPlayer and HumanPlayer classes) but for a simple console app will be overkill
         AddCpuPlayers();
         
-        House.CalculateRevenue(_players);
+        var house = new House();    
+        house.CalculateRevenue(_players);
         
-        var availableTickets = _players.SelectMany(p => p.Tickets).ToList();
-        var initialTicketsCount = availableTickets.Count;   
+        List<Ticket> availableTickets = [.. _players.SelectMany(p => p.Tickets)];
         var ticketOwners = _players
             .SelectMany(p => p.Tickets, (p, t) => new { p, t })
             .ToDictionary(x => x.t.Id, x => x.p);
         
-        List<WinningResult> res = [.. _prizes.SelectMany(prize => prize.DistributeWinnings(availableTickets, ticketOwners, initialTicketsCount))];
-        House.RecordWinnings(res);
-        Print(res);
+        List<WinningResult> res = [.. _prizes.SelectMany(prize => prize.DistributeWinnings(
+            availableTickets: availableTickets, 
+            ticketOwners: ticketOwners, 
+            revenue: house.Revenue))];
+        
+        house.RecordWinnings(res);
+        
+        Print(res, house.Revenue);
     }
 
     private void AddCpuPlayers()
@@ -78,7 +83,7 @@ public class LotteryGame
         _players.Add(humanPlayer);
     }
     
-    private static void Print(IReadOnlyCollection<WinningResult> results)
+    private static void Print(IReadOnlyCollection<WinningResult> results, decimal revenue)
     {
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.WriteLine("\n✨🎉 Winning Tickets 🎉✨\n");
@@ -118,7 +123,7 @@ public class LotteryGame
         Console.ForegroundColor = ConsoleColor.Green;
         Console.Write("🏦 House Profit: ");
         Console.ResetColor();
-        Console.WriteLine($"{House.Revenue:C}");
+        Console.WriteLine($"{revenue:C}");
 
         Console.WriteLine("-----------------------------------\n");
         Console.WriteLine("See you again in Bede Lottery 🎰");
