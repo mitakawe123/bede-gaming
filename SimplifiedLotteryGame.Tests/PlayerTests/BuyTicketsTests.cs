@@ -22,17 +22,6 @@ public class BuyTicketsTests
     }
 
     [Fact]
-    public void BuyTickets_OutOfRange()
-    {
-        // Arrange
-        var player = new Player();
-
-        // Act & Assert
-        Assert.Throws<ArgumentException>(() => player.BuyTickets(0));
-        Assert.Throws<ArgumentException>(() => player.BuyTickets(11));
-    }
-
-    [Fact]
     public void BuyTickets_WithRandomCount()
     {
         // Arrange

@@ -30,9 +30,6 @@ public sealed class Player
             var randomTicketsNumber = new Random().Next(MinimumTicketCount, MaximumTicketCount); // All players (human and CPU) are limited to purchasing between 1 and 10 tickets
             count = (uint)randomTicketsNumber;
         }
-        
-        if (count is < 1 or > 10)
-            throw new ArgumentException("Tickets must be between 1 and 10");
 
         for (var i = 0; i < count; i++)
         {

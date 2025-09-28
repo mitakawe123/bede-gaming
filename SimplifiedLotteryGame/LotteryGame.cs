@@ -59,13 +59,25 @@ public class LotteryGame
     {
         var humanPlayer = new Player();
         Console.WriteLine($"And hello again {humanPlayer.Name}");
-        Console.WriteLine($"How many tickets do you want to buy, {humanPlayer.Name}?");
-       
-        if (uint.TryParse(Console.ReadLine(), out var ticketNumber))
-            humanPlayer.BuyTickets(ticketNumber);
-        else
-            throw new ArgumentException("Please enter a valid number");
-        
+
+        uint ticketNumber;
+        while (true)
+        {
+            Console.WriteLine($"How many tickets do you want to buy, {humanPlayer.Name}?");
+            var input = Console.ReadLine();
+
+            if (uint.TryParse(input, out ticketNumber) 
+                && ticketNumber is >= Player.MinimumTicketCount and <= Player.MaximumTicketCount)
+            {
+                break; // valid input, exit loop
+            }
+
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Invalid input. Please enter a number between {Player.MinimumTicketCount} and {Player.MaximumTicketCount}.");
+            Console.ResetColor();
+        }
+
+        humanPlayer.BuyTickets(ticketNumber);
         _players.Add(humanPlayer);
     }
 }
