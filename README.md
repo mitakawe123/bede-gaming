@@ -27,15 +27,16 @@ Follow the console instructions:
 4. The console prints the winners and the final revenue.
 
 <h3>Example</h3>
-Welcome to the Bede Lottery 🎰 \n
-And hello again Alice
-How many tickets do you want to buy, Alice?
-3
-CPU players have bought their tickets
-🏆 Prize winners:
-- Alice won $50
-- CPU Player 1 won $20
+Welcome to the Bede Lottery 🎰<br>
+And hello again Alice<br>
+How many tickets do you want to buy, Alice?<br>
+3<br>
+CPU players have bought their tickets<br>
+🏆 Prize winners:<br>
+- Alice won $50<br>
+- CPU Player 1 won $20<br>
 See you again in Bede Lottery 🎰
+
 
 <h3>Running Tests</h3>
 
