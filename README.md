@@ -27,7 +27,7 @@ Follow the console instructions:
 4. The console prints the winners and the final revenue.
 
 <h3>Example</h3>
-Welcome to the Bede Lottery 🎰
+Welcome to the Bede Lottery 🎰 \n
 And hello again Alice
 How many tickets do you want to buy, Alice?
 3
