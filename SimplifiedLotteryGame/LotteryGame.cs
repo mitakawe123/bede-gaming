@@ -37,11 +37,8 @@ public class LotteryGame
             .ToDictionary(x => x.t.Id, x => x.p);
         
         List<WinningResult> res = [.. _prizes.SelectMany(prize => prize.DistributeWinnings(availableTickets, ticketOwners, initialTicketsCount))];
-
         House.RecordWinnings(res);
-        House.Print(res);
-        
-        Console.WriteLine("See you again in Bede Lottery 🎰");
+        Print(res);
     }
 
     private void AddCpuPlayers()
@@ -79,5 +76,51 @@ public class LotteryGame
 
         humanPlayer.BuyTickets(ticketNumber);
         _players.Add(humanPlayer);
+    }
+    
+    private static void Print(IReadOnlyCollection<WinningResult> results)
+    {
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.WriteLine("\n✨🎉 Winning Tickets 🎉✨\n");
+        Console.ResetColor();
+
+        var groupedByPlayer = results
+            .GroupBy(r => r.Player.Id);
+
+        foreach (var playerGroup in groupedByPlayer)
+        {
+            var player = playerGroup.First().Player;
+            var totalWinnings = playerGroup.Sum(r => r.Amount);
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write($"💰 {player.Name} Total Winnings: ");
+            Console.ResetColor();
+            Console.WriteLine($"{totalWinnings:C}  Balance: {player.Balance:C}");
+
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.Write("🎟️ Tickets: ");
+            Console.ResetColor();
+
+            // List all ticket IDs for this player
+            foreach (var result in playerGroup)
+            {
+                Console.Write($"{result.Ticket.Id} ");
+            }
+            Console.WriteLine("\n");
+        }
+
+        Console.ForegroundColor = ConsoleColor.Magenta;
+        Console.WriteLine("🏆 Good luck to all players! 🏆\n");
+        Console.ResetColor();
+
+        Console.WriteLine("-----------------------------------");
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.Write("🏦 House Profit: ");
+        Console.ResetColor();
+        Console.WriteLine($"{House.Revenue:C}");
+
+        Console.WriteLine("-----------------------------------\n");
+        Console.WriteLine("See you again in Bede Lottery 🎰");
     }
 }

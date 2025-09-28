@@ -4,13 +4,13 @@ public sealed class Player
 {
     private static uint _nextPlayerId = 1;
 
-    private readonly uint _id;
+    public uint Id { get; }
 
     public const int MinimumTicketCount = 1;
     
     public const int MaximumTicketCount = 10;
 
-    public string Name => $"Player {_id}";
+    public string Name => $"Player {Id}";
 
     public decimal Balance { get; private set; } = 10; // Each player begins with a starting balance of $10
 
@@ -18,7 +18,7 @@ public sealed class Player
 
     public Player()
     {
-        _id = _nextPlayerId++;
+        Id = _nextPlayerId++;
     }
     
     public void AddWinning(decimal amount) => Balance += amount;
@@ -33,7 +33,7 @@ public sealed class Player
 
         for (var i = 0; i < count; i++)
         {
-            var ticket = new Ticket(_id);
+            var ticket = new Ticket(Id);
             Tickets.Add(ticket);
             Balance -= Ticket.Price;
         }
