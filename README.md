@@ -46,8 +46,3 @@ dotnet test
 ```
 
 Tests simulate human input and verify that the game flow works as expected.
-
-<h3>What Can Be Improved</h3>
-
-1. Player Classes: Both CPU and human players use the same Player class. Creating separate HumanPlayer and CpuPlayer classes with a strategy pattern would improve readability and flexibility.
-2. UI/UX: A console game could be extended to a GUI or web-based front-end for better user experience.
