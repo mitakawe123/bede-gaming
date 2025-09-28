@@ -48,9 +48,5 @@ Tests simulate human input and verify that the game flow works as expected.
 
 <h3>What Can Be Improved</h3>
 
-Dependency Injection & Interfaces: Currently the game relies on static House and Console I/O. Using interfaces (IUserInterface, IHouse) allows easier testing and customization.
-Player Classes: Both CPU and human players use the same Player class. Creating separate HumanPlayer and CpuPlayer classes with a strategy pattern would improve readability and flexibility.
-Randomness Control: CPU player count is randomized. For testing, seeding the random number generator would make tests deterministic.
-Prize System Extensibility: Adding new prize types requires modifying the assembly and class discovery. A plugin or configuration-based system could simplify this.
-UI/UX: A console game could be extended to a GUI or web-based front-end for better user experience.
-Error Handling: Input validation is minimal. Handling invalid inputs or unexpected errors more gracefully would improve stability.
+1. Player Classes: Both CPU and human players use the same Player class. Creating separate HumanPlayer and CpuPlayer classes with a strategy pattern would improve readability and flexibility.
+2. UI/UX: A console game could be extended to a GUI or web-based front-end for better user experience.
