@@ -1,3 +1,4 @@
+using SimplifiedLotteryGame.DTOs;
 using SimplifiedLotteryGame.Models;
 using SimplifiedLotteryGame.Models.Prizes;
 
@@ -30,11 +31,15 @@ public class LotteryGame
         House.CalculateRevenue(_players);
         
         var availableTickets = _players.SelectMany(p => p.Tickets).ToList();
-        var initialTicketsCount = availableTickets.Count;
+        var initialTicketsCount = availableTickets.Count;   
+        var ticketOwners = _players
+            .SelectMany(p => p.Tickets, (p, t) => new { p, t })
+            .ToDictionary(x => x.t.Id, x => x.p);
         
-        _prizes.ForEach(prize => prize.DistributeWinnings(availableTickets, initialTicketsCount));
+        List<WinningResult> res = [.. _prizes.SelectMany(prize => prize.DistributeWinnings(availableTickets, ticketOwners, initialTicketsCount))];
 
-        House.Print();
+        House.RecordWinnings(res);
+        House.Print(res);
         
         Console.WriteLine("See you again in Bede Lottery 🎰");
     }
@@ -55,14 +60,12 @@ public class LotteryGame
         var humanPlayer = new Player();
         Console.WriteLine($"And hello again {humanPlayer.Name}");
         Console.WriteLine($"How many tickets do you want to buy, {humanPlayer.Name}?");
+       
         if (uint.TryParse(Console.ReadLine(), out var ticketNumber))
-        {
             humanPlayer.BuyTickets(ticketNumber);
-            _players.Add(humanPlayer);
-        }
         else
-        {
             throw new ArgumentException("Please enter a valid number");
-        }
+        
+        _players.Add(humanPlayer);
     }
 }

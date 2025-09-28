@@ -5,59 +5,78 @@ namespace SimplifiedLotteryGame.Tests.PrizeTests;
 
 public class PrizeTests
 {
-    private readonly List<Ticket> _initialTickets = GenerateTickets(new Random().Next(100, 200));
-
-    private static int _initialTicketsCount = 0;
-
-    private static List<Ticket> GenerateTickets(int count)
+    private static List<Player> GeneratePlayers(int count, int seed = 42)
     {
-        var tickets = new List<Ticket>();
+        var random = new Random(seed);
+        var players = new List<Player>();
+
         for (int i = 0; i < count; i++)
         {
-            tickets.Add(new Ticket());
+            var player = new Player();
+            player.BuyTickets((uint)random.Next(Player.MinimumTicketCount, Player.MaximumTicketCount));
+            players.Add(player);
         }
 
-        _initialTicketsCount = tickets.Count;
-        return tickets;
+        return players;
     }
 
+    private static Dictionary<uint, Player> BuildTicketOwners(List<Player> players) =>
+        players.SelectMany(p => p.Tickets, (p, t) => new { p, t })
+               .ToDictionary(x => x.t.Id, x => x.p);
+
     [Fact]
-    public void GrandPrize_Distribute_ToOneWinner()
+    public void GrandPrize_ShouldRemoveExactlyOneTicket()
     {
         // Arrange
+        var players = GeneratePlayers(15);
+        var tickets = players.SelectMany(p => p.Tickets).ToList();
+        var initialCount = tickets.Count;
+        var owners = BuildTicketOwners(players);
+
         var prize = new GrandPrize();
-
+        
         // Act
-        prize.DistributeWinnings(_initialTickets, _initialTicketsCount);
+        prize.DistributeWinnings(tickets, owners, initialCount);
 
         // Assert
-        Assert.Equal(_initialTicketsCount - 1, _initialTickets.Count);
+        Assert.Equal(initialCount - 1, tickets.Count);
     }
 
     [Fact]
-    public void SecondTierPrize_Distribute_ToMultipleWinners()
+    public void SecondTier_ShouldRemoveAtLeastTenPercent()
     {
         // Arrange
+        var players = GeneratePlayers(15);
+        var tickets = players.SelectMany(p => p.Tickets).ToList();
+        var initialCount = tickets.Count;
+        var owners = BuildTicketOwners(players);
+
         var prize = new SecondTier();
-
+        
         // Act
-        prize.DistributeWinnings(_initialTickets, _initialTicketsCount);
+        prize.DistributeWinnings(tickets, owners, initialCount);
 
         // Assert
-        Assert.True(_initialTickets.Count <= _initialTicketsCount - 10); // at least 0.1 from the minimum tickets are removed
+        var removed = initialCount - tickets.Count;
+        Assert.True(removed >= (int)Math.Round(initialCount * 0.1));
     }
-    
+
     [Fact]
-    public void ThirdTierPrize_Distribute_ToMultipleWinners()
+    public void ThirdTier_ShouldRemoveAtLeastTwentyPercent()
     {
         // Arrange
-        var prize = new ThirdTier();
+        var players = GeneratePlayers(15);
+        var tickets = players.SelectMany(p => p.Tickets).ToList();
+        var initialCount = tickets.Count;
+        var owners = BuildTicketOwners(players);
 
+        var prize = new ThirdTier();
+        
         // Act
-        prize.DistributeWinnings(_initialTickets, _initialTicketsCount);
+        prize.DistributeWinnings(tickets, owners, initialCount);
 
         // Assert
-        Assert.True(_initialTickets.Count <= _initialTicketsCount - 20); // at least 0.2 from the minimum tickets are removed
+        var removed = initialCount - tickets.Count;
+        Assert.True(removed >= (int)Math.Round(initialCount * 0.2));
     }
 }
-

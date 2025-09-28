@@ -7,9 +7,12 @@ public sealed class Ticket
     public uint Id { get; }
 
     public static uint Price => 1; // Tickets are priced at $1 each
+    
+    public uint PlayerId { get; }
 
-    public Ticket()
+    public Ticket(uint playerId)
     {
         Id = _nextTicketId++;
+        PlayerId = playerId;
     }
 }

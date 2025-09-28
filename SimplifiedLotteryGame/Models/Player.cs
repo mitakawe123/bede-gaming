@@ -20,6 +20,8 @@ public sealed class Player
     {
         _id = _nextPlayerId++;
     }
+    
+    public void AddWinning(decimal amount) => Balance += amount;
 
     public void BuyTickets(uint? count = null)
     {
@@ -34,30 +36,9 @@ public sealed class Player
 
         for (var i = 0; i < count; i++)
         {
-            var ticket = new Ticket();
+            var ticket = new Ticket(_id);
             Tickets.Add(ticket);
             Balance -= Ticket.Price;
         }
-
-        Print(count);
-    }
-
-    private void Print(uint? count)
-    {
-        Console.ForegroundColor = ConsoleColor.Cyan;
-        Console.Write("🎟️  ");
-        Console.ResetColor();
-
-        Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.Write($"{Name}");
-        Console.ResetColor();
-
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.Write($" bought {count} ticket{(count > 1 ? "s" : "")}");
-        Console.ResetColor();
-
-        Console.ForegroundColor = ConsoleColor.Magenta;
-        Console.WriteLine(" 💸✨");
-        Console.ResetColor();
     }
 }

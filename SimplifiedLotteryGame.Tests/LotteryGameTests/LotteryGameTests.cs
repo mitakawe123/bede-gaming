@@ -3,30 +3,31 @@ namespace SimplifiedLotteryGame.Tests.LotteryGameTests;
 public class LotteryGameTests
 {
     [Fact]
-    public void StartGame_ShouldRunFullFlow_WithCpuAndHumanPlayers()
+    public void StartGame_ShouldNotThrow_WhenHumanInputIsValid()
     {
         // Arrange
         var lotteryGame = new LotteryGame();
-
-        using var stringReader = new StringReader("3");
+        using var stringReader = new StringReader("1"); // human buys 1 ticket
         Console.SetIn(stringReader);
-
         using var stringWriter = new StringWriter();
         Console.SetOut(stringWriter);
 
-        // Act
-        lotteryGame.StartGame();
+        // Act & Assert
+        var exception = Record.Exception(() => lotteryGame.StartGame());
+        Assert.Null(exception); // should not throw
+    }
 
-        // Assert: check console output contains expected messages
-        var output = stringWriter.ToString();
-        Assert.Contains("Welcome to the Bede Lottery", output);
-        Assert.Contains("See you again in Bede Lottery", output);
-        Assert.Contains("bought 3 ticket", output);
+    [Fact]
+    public void StartGame_ShouldThrow_WhenHumanInputIsInvalid()
+    {
+        // Arrange
+        var lotteryGame = new LotteryGame();
+        using var stringReader = new StringReader("invalid_number");
+        Console.SetIn(stringReader);
+        using var stringWriter = new StringWriter();
+        Console.SetOut(stringWriter);
 
-        var winningTickets = House.GetWinners();
-        Assert.NotEmpty(winningTickets); // at least one winning ticket should exist
-
-        var houseRevenue = House.GetRevenue();
-        Assert.True(houseRevenue >= 0);
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() => lotteryGame.StartGame());
     }
 }

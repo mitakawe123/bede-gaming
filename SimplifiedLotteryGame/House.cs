@@ -1,56 +1,44 @@
+using SimplifiedLotteryGame.DTOs;
 using SimplifiedLotteryGame.Models;
 
 namespace SimplifiedLotteryGame;
 
 public static class House
 {
-    private static decimal _revenue;
+    public static decimal Revenue { get; private set; }
 
-    private static readonly Dictionary<uint, decimal> WinningTickets = [];
-    
-    public static decimal GetRevenue() => _revenue;
-    
-    public static IReadOnlyDictionary<uint, decimal> GetWinners() => WinningTickets;
-    
     public static void CalculateRevenue(IReadOnlyCollection<Player> players)
     {
-        _revenue = players.Sum(p => p.Balance + p.Tickets.Sum(t => Ticket.Price));
+        Revenue = players.Sum(p => p.Balance + p.Tickets.Sum(t => Ticket.Price));
     }
 
-    public static void AwardWinningTicket(Ticket winningTicket, decimal prizePercentage)
+    public static void RecordWinnings(IReadOnlyCollection<WinningResult> results)
     {
-        var winning = _revenue * prizePercentage;
-        WinningTickets[winningTicket.Id] = winning;
-        _revenue -= winning;
-    }
-
-    public static void AwardWinningTickets(IReadOnlyCollection<Ticket> winningTickets, decimal prizePercentage)
-    {
-        var ticketWinning = (_revenue * prizePercentage) / winningTickets.Count; // equal win for each ticket
-        foreach (var winningTicket in winningTickets)
+        foreach (var result in results)
         {
-            WinningTickets[winningTicket.Id] = ticketWinning;
-            _revenue -= ticketWinning;
+            result.Player.AddWinning(result.Amount);
+            Revenue -= result.Amount;
         }
     }
 
-    public static void Print()
+    public static void Print(IReadOnlyCollection<WinningResult> results)
     {
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.WriteLine("\n✨🎉 Winning Tickets 🎉✨\n");
         Console.ResetColor();
 
-        foreach (var (ticketId, winningAmount) in WinningTickets)
+        foreach (var (player, ticket, amount) in results)
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.Write("🎟️ Ticket ID: ");
             Console.ResetColor();
-            Console.Write($"{ticketId}  ");
+            Console.Write($"{ticket.Id}  ");
 
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("💰 Winnings: ");
+            Console.Write($"💰 {player.Name} Winnings: ");
             Console.ResetColor();
-            Console.WriteLine($"{winningAmount:C}");
+            Console.Write($"{amount:C} ");
+            Console.WriteLine($"Balance: {player.Balance:C}");
         }
 
         Console.ForegroundColor = ConsoleColor.Magenta;
@@ -62,7 +50,7 @@ public static class House
         Console.ForegroundColor = ConsoleColor.Green;
         Console.Write("🏦 House Profit: ");
         Console.ResetColor();
-        Console.WriteLine($"{_revenue:C}");
+        Console.WriteLine($"{Revenue:C}");
 
         Console.WriteLine("-----------------------------------\n");
     }
